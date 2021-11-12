@@ -13,3 +13,4 @@ _site/
 api/build
 app/build
 build/*
+.gradle/*

@@ -14,7 +14,6 @@ allprojects {
 
     dependencies {
         implementation 'org.springframework.boot:spring-boot-starter-actuator:2.5.5'
-        implementation 'javax.xml.bind:jaxb-api:2.3.0'
         implementation 'org.springframework.boot:spring-boot-starter-cache:2.5.5'
         implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.5.5'
         implementation 'org.springframework.boot:spring-boot-starter-web:2.5.5'
@@ -29,6 +28,7 @@ allprojects {
         implementation 'org.springframework.boot:spring-boot-devtools:2.5.5'
         runtimeOnly 'com.h2database:h2:1.4.200'
         runtimeOnly 'mysql:mysql-connector-java:8.0.26'
+        implementation 'org.codehaus.groovy:groovy-all:2.4.12'
         testImplementation 'org.springframework.boot:spring-boot-starter-test:2.5.5'
     }
 
@@ -46,10 +46,10 @@ allprojects {
             url = uri('https://repo.maven.apache.org/maven2/')
         }
     }
-}
 
-bootJar {
-    enabled = false
+    test {
+        useJUnitPlatform()
+    }
 }
 
 project (':api') {
@@ -67,14 +67,25 @@ project (':api') {
 project(':app') {
     apply plugin: 'org.springframework.boot'
     apply plugin: 'org.liquibase.gradle'
+}
 
-//    mainClass = "org.springframework.samples.petclinic.PetClinicApplication"
+compileJava {
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
 }
 
 group = 'org.springframework.samples'
 version = '2.5.0-SNAPSHOT'
 description = 'petclinic'
 java.sourceCompatibility = JavaVersion.VERSION_1_8
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from(components.java)
+        }
+    }
+}
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
