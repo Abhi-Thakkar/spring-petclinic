@@ -69,6 +69,10 @@ project(':app') {
     apply plugin: 'org.liquibase.gradle'
 }
 
+bootJar {
+    enabled = false
+}
+
 compileJava {
     sourceCompatibility = '1.8'
     targetCompatibility = '1.8'
