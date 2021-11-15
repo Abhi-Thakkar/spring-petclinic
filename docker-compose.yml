@@ -11,14 +11,23 @@ mysql:
   volumes:
     - "./conf.d:/etc/mysql/conf.d:ro"
 jenkins:
-  image: abhi/jenkins-1
+  image: jenkins/jenkins:latest-jdk8
   ports:
     - "8081:8080"
+  volumes:
+    - "./jenkins_home:/var/jenkins_home"
+  links:
+    - mysql
+    - nexus
 nexus:
   image: sonatype/nexus3
   ports:
     - "8082:8081"
 sonar:
-  image: sonarqube
+  image: sonarqube:5.6.7
   ports:
     - "9000:9000"
+  privileged: true
+  environment:
+    - "TZ=America/Los_Angeles"
+    - "ES_JAVA_HOME=/opt/java/openjdk"
